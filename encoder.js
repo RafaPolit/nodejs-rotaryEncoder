@@ -8,8 +8,8 @@ const sw = new Gpio(22, "in", "rising", { debounceTimeout: 10 });
 
 console.log("Rotate or click on the encoder");
 
-const rotation = 0;
-const click = 0;
+let rotation = 0;
+let click = 0;
 
 const formatOutput = () => {
   pocess.stdout.write(`Rotation: ${rotation}, Click: ${click}`);
