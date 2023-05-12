@@ -76,7 +76,7 @@ sw.watch(async (err, value) => {
     await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value: "click", index: clickIndex }),
+      body: JSON.stringify({ value: "press", index: clickIndex }),
     });
     hrClickStart = hrtime.bigint();
   } else {
