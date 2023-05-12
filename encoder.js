@@ -2,8 +2,8 @@
 
 const Gpio = require("onoff").Gpio; // Gpio class
 
-const clk = new Gpio(17, "in", "rising", { debounceTimeout: 10 });
-const dt = new Gpio(27, "in", "rising", { debounceTimeout: 10 });
+const clk = new Gpio(17, "in", "rising", { debounceTimeout: 2 });
+const dt = new Gpio(27, "in", "rising", { debounceTimeout: 2 });
 const sw = new Gpio(22, "in", "rising", { debounceTimeout: 10 });
 
 console.log("Rotate or click on the encoder");
@@ -28,7 +28,7 @@ dt.watch((err, dtValue) => {
   }
 
   const clkValue = clk.readSync();
-  console.log("CLK:", dtValue, " DT:", clkValue);
+  console.log("DT:", dtValue, " CLK:", clkValue);
   if (clkValue === dtValue) {
     console.log("CW");
   } else {
