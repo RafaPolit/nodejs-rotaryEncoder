@@ -1,6 +1,6 @@
 "use strict";
 
-const Gpio = require("../onoff").Gpio; // Gpio class
+const Gpio = require("onoff").Gpio; // Gpio class
 
 // Export GPIO4 as an interrupt generating input with a debounceTimeout of 10
 // milliseconds
