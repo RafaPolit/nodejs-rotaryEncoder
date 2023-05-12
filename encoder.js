@@ -15,7 +15,7 @@ let longClick = 0;
 
 let hrLastRotation = BigInt(0);
 let hrClickStart = BigInt(0);
-let speed = 10;
+let speed = 1;
 
 const formatOutput = () => {
   process.stdout.clearLine();
@@ -35,19 +35,21 @@ clk.watch((err, clkValue) => {
     hrLastRotation = hrtime.bigint();
   } else {
     const hrCurrentRotation = hrtime.bigint();
-    speed = Math.min(
+    const speedFactor = Math.min(
       10,
       Math.round(
         parseInt((hrCurrentRotation - hrLastRotation) / BigInt(15000000))
       )
     );
     hrLastRotation = hrtime.bigint();
+
+    speed = 1 + (10 - speedFactor);
   }
 
   if (dtValue !== clkValue) {
-    rotation += 1;
+    rotation += speed;
   } else {
-    rotation -= 1;
+    rotation -= speed;
   }
 
   formatOutput();
