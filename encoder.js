@@ -8,7 +8,8 @@ const dt = new Gpio(27, "in", "both", { debounceTimeout: 10 });
 const sw = new Gpio(22, "in", "both", { debounceTimeout: 10 });
 
 const virtualATRUrl = "http://192.168.0.47:3000/";
-const encoderIndex = 6;
+const encoderIndex = 2000;
+const clickIndex = 6;
 
 console.log("Rotate or click on the encoder");
 
@@ -27,7 +28,7 @@ const formatOutput = () => {
   );
 };
 
-clk.watch((err, clkValue) => {
+clk.watch(async (err, clkValue) => {
   if (err) {
     throw err;
   }
@@ -57,27 +58,42 @@ clk.watch((err, clkValue) => {
     value = -1;
     rotation -= speed;
   }
-  fetch(`${virtualATRUrl}api/encoder-forwarder`, {
+  await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ value }),
+    body: JSON.stringify({ value, index: encoderIndex }),
   });
 
   formatOutput();
 });
 
-sw.watch((err, value) => {
+sw.watch(async (err, value) => {
   if (err) {
     throw err;
   }
 
   if (value === 0) {
+    await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ value: "click", index: clickIndex }),
+    });
     hrClickStart = hrtime.bigint();
   } else {
     const hrEnd = hrtime.bigint();
     if (hrEnd - hrClickStart > BigInt(1000000000)) {
+      await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value: "longRelease", index: clickIndex }),
+      });
       longClick += 1;
     } else {
+      await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ value: "release", index: clickIndex }),
+      });
       click += 1;
     }
     formatOutput();
