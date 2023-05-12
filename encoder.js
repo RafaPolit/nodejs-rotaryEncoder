@@ -7,6 +7,9 @@ const clk = new Gpio(17, "in", "rising");
 const dt = new Gpio(27, "in", "both", { debounceTimeout: 10 });
 const sw = new Gpio(22, "in", "both", { debounceTimeout: 10 });
 
+const virtualATRUrl = "http://192.168.0.47:3000/";
+const encoderIndex = 6;
+
 console.log("Rotate or click on the encoder");
 
 let rotation = 0;
@@ -46,11 +49,18 @@ clk.watch((err, clkValue) => {
     speed = 1 + (10 - speedFactor);
   }
 
+  let value = 0;
   if (dtValue !== clkValue) {
+    value = 1;
     rotation += speed;
   } else {
+    value = -1;
     rotation -= speed;
   }
+  fetch(`${virtualATRUrl}api/encoder-forwarder`, {
+    method: "POST",
+    body: JSON.stringify({ value }),
+  });
 
   formatOutput();
 });
