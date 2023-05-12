@@ -37,8 +37,11 @@ clk.watch((err, clkValue) => {
     const hrCurrentRotation = hrtime.bigint();
     speed = Math.min(
       10,
-      Math.round((hrCurrentRotation - hrLastRotation) / BigInt(30000000))
+      Math.round(
+        parseInt((hrCurrentRotation - hrLastRotation) / BigInt(30000000))
+      )
     );
+    hrLastRotation = hrtime.bigint();
   }
 
   if (dtValue !== clkValue) {
