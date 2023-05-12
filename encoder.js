@@ -59,7 +59,7 @@ clk.watch((err, clkValue) => {
   }
   fetch(`${virtualATRUrl}api/encoder-forwarder`, {
     method: "POST",
-    body: JSON.stringify({ value }),
+    body: { value },
   });
 
   formatOutput();
