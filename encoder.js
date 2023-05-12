@@ -12,12 +12,15 @@ console.log("Rotate or click on the encoder");
 let rotation = 0;
 let click = 0;
 let longClick = 0;
-let hrStart = BigInt(0);
+
+let hrLastRotation = BigInt(0);
+let hrClickStart = BigInt(0);
+let speed = 10;
 
 const formatOutput = () => {
   process.stdout.clearLine();
   process.stdout.write(
-    `Rotation: ${rotation}, Click: ${click}, Long Click: ${longClick}\r`
+    `Rotation: ${rotation}, Click: ${click}, Long Click: ${longClick}, Speed: ${speed}\r`
   );
 };
 
@@ -27,6 +30,17 @@ clk.watch((err, clkValue) => {
   }
 
   const dtValue = dt.readSync();
+
+  if (hrLastRotation === BigInt(0)) {
+    hrLastRotation = hrtime.bigint();
+  } else {
+    const hrCurrentRotation = hrtime.bigint();
+    speed = Math.min(
+      10,
+      Math.round((hrCurrentRotation - hrLastRotation) / BigInt(30000000))
+    );
+  }
+
   if (dtValue !== clkValue) {
     rotation += 1;
   } else {
@@ -42,10 +56,10 @@ sw.watch((err, value) => {
   }
 
   if (value === 0) {
-    hrStart = hrtime.bigint();
+    hrClickStart = hrtime.bigint();
   } else {
     const hrEnd = hrtime.bigint();
-    if (hrEnd - hrStart > BigInt(1000000000)) {
+    if (hrEnd - hrClickStart > BigInt(1000000000)) {
       longClick += 1;
     } else {
       click += 1;
