@@ -8,17 +8,23 @@ const sw = new Gpio(22, "in", "rising", { debounceTimeout: 10 });
 
 console.log("Rotate or click on the encoder");
 
+const rotation = 0;
+const click = 0;
+
+const formatOutput = () => {
+  pocess.stdout.write(`Rotation: ${rotation}, Click: ${click}`);
+};
+
 clk.watch((err, clkValue) => {
   if (err) {
     throw err;
   }
 
   const dtValue = dt.readSync();
-  console.log("CLK:", clkValue, " DT:", dtValue);
-  if (dtValue === clkValue) {
-    console.log("CW");
+  if (dtValue !== clkValue) {
+    rotation += 1;
   } else {
-    console.log("CCW");
+    rotation -= 1;
   }
 });
 
@@ -27,7 +33,8 @@ sw.watch((err, value) => {
     throw err;
   }
 
-  console.log("Button pressed!, its value was " + value);
+  click += 1;
+  formatOutput();
 });
 
 process.on("SIGINT", (_) => {
