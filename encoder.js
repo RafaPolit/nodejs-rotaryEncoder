@@ -8,8 +8,7 @@ const dt = new Gpio(27, "in", "both", { debounceTimeout: 10 });
 const sw = new Gpio(22, "in", "both", { debounceTimeout: 10 });
 
 const virtualATRUrl = "http://192.168.0.47:3000/";
-const encoderIndex = 2000;
-const clickIndex = 6;
+const encoderId = 1;
 
 console.log("Rotate or click on the encoder");
 
@@ -61,7 +60,7 @@ clk.watch(async (err, clkValue) => {
   await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ value, index: encoderIndex }),
+    body: JSON.stringify({ value, index: encoderId }),
   });
 
   formatOutput();
@@ -76,7 +75,7 @@ sw.watch(async (err, value) => {
     await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ value: "press", index: clickIndex }),
+      body: JSON.stringify({ value: "press", index: encoderId }),
     });
     hrClickStart = hrtime.bigint();
   } else {
@@ -85,14 +84,14 @@ sw.watch(async (err, value) => {
       await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ value: "longRelease", index: clickIndex }),
+        body: JSON.stringify({ value: "longRelease", index: encoderId }),
       });
       longClick += 1;
     } else {
       await fetch(`${virtualATRUrl}api/encoder-forwarder`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ value: "release", index: clickIndex }),
+        body: JSON.stringify({ value: "release", index: encoderId }),
       });
       click += 1;
     }
