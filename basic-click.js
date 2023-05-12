@@ -16,6 +16,8 @@ button.watch((err, value) => {
   }
 
   console.log("Button pressed!, its value was " + value);
+});
 
-  button.unexport(); // Unexport GPIO and free resources
+process.on("SIGINT", (_) => {
+  button.unexport();
 });
