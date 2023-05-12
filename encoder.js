@@ -12,7 +12,7 @@ let rotation = 0;
 let click = 0;
 
 const formatOutput = () => {
-  process.stdout.write(`Rotation: ${rotation}, Click: ${click}`);
+  process.stdout.write(`Rotation: ${rotation}, Click: ${click}\r`);
 };
 
 clk.watch((err, clkValue) => {
