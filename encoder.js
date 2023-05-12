@@ -2,7 +2,7 @@
 
 const Gpio = require("onoff").Gpio; // Gpio class
 
-const clk = new Gpio(17, "in", "rising", { debounceTimeout: 1 });
+const clk = new Gpio(17, "in", "rising");
 const dt = new Gpio(27, "in", "both");
 const sw = new Gpio(22, "in", "rising", { debounceTimeout: 10 });
 
