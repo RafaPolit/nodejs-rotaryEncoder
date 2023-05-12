@@ -12,7 +12,7 @@ console.log("Rotate or click on the encoder");
 let rotation = 0;
 let click = 0;
 let longClick = 0;
-let hrStart = 0;
+let hrStart = BigInt(0);
 
 const formatOutput = () => {
   process.stdout.clearLine();
@@ -41,19 +41,18 @@ sw.watch((err, value) => {
     throw err;
   }
 
-  console.log("sw with:", value);
-  // if (value === 1) {
-  //   hrStart = hrtime.bigint();
-  // } else {
-  //   const hrEnd = hrtime.bigint();
-  //   console.log("took:", hrEnd - hrStart);
-  //   if (hrEnd - hrStart > 1000000) {
-  //     longClick += 1;
-  //   } else {
-  //     click += 1;
-  //   }
-  // }
-  // formatOutput();
+  if (value === 0) {
+    hrStart = hrtime.bigint();
+  } else {
+    const hrEnd = hrtime.bigint();
+    console.log("took:", hrEnd - hrStart);
+    if (hrEnd - hrStart > 1000000) {
+      longClick += 1;
+    } else {
+      click += 1;
+    }
+  }
+  formatOutput();
 });
 
 process.on("SIGINT", (_) => {
