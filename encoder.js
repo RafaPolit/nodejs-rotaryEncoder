@@ -4,7 +4,7 @@ const { hrtime } = require("node:process");
 const Gpio = require("onoff").Gpio; // Gpio class
 
 const clk = new Gpio(17, "in", "rising");
-const dt = new Gpio(27, "in", "both");
+const dt = new Gpio(27, "in", "both", { debounceTimeout: 10 });
 const sw = new Gpio(22, "in", "both", { debounceTimeout: 10 });
 
 console.log("Rotate or click on the encoder");
