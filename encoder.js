@@ -12,7 +12,7 @@ let rotation = 0;
 let click = 0;
 
 const formatOutput = () => {
-  pocess.stdout.write(`Rotation: ${rotation}, Click: ${click}`);
+  process.stdout.write(`Rotation: ${rotation}, Click: ${click}`);
 };
 
 clk.watch((err, clkValue) => {
@@ -26,6 +26,8 @@ clk.watch((err, clkValue) => {
   } else {
     rotation -= 1;
   }
+
+  formatOutput();
 });
 
 sw.watch((err, value) => {
