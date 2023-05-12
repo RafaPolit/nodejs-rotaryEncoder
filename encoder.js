@@ -45,14 +45,13 @@ sw.watch((err, value) => {
     hrStart = hrtime.bigint();
   } else {
     const hrEnd = hrtime.bigint();
-    console.log("took:", hrEnd - hrStart);
-    if (hrEnd - hrStart > 1000000) {
+    if (hrEnd - hrStart > BigInt(1000000000)) {
       longClick += 1;
     } else {
       click += 1;
     }
+    formatOutput();
   }
-  formatOutput();
 });
 
 process.on("SIGINT", (_) => {
