@@ -8,8 +8,14 @@ const sw = new Gpio(22, "in", "rising", { debounceTimeout: 10 });
 
 console.log("Rotate or click on the encoder");
 
-clk.watch((err, value) => {
-  if (dt.readSync() === value) {
+clk.watch((err, clkValue) => {
+  if (err) {
+    throw err;
+  }
+
+  const dtVale = dt.readSync();
+  console.log("CLK:", clkValue, " DT:", dtVale);
+  if (dtVale === clkValue) {
     console.log("CW");
   } else {
     console.log("CCW");
